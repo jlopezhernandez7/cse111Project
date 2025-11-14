@@ -16,6 +16,8 @@ INSERT INTO users (u_username, u_email, u_password) VALUES
 ('mika',  'mika@ucmerced.edu',  'pass_mika');
 
 
+
+
 -- EVENTS
 INSERT INTO event (e_eventDate, e_location, e_userID, e_type, e_name,
                    e_duration, e_capacity, e_statusID)
