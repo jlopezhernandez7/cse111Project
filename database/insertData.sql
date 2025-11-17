@@ -26,6 +26,8 @@ VALUES
 ('2025-11-22', 'The Quad',         2, 'music',   'Guitar Jam on the Lawn', 120, 40, 2),
 ('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25, 3);
 
+
+
 -- STATUS rows (one per event; counts start at 0)
 INSERT INTO status (s_countGoing, s_maybeGoing) VALUES
 (4, 5),  -- statusID = 1

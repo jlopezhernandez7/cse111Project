@@ -29,7 +29,7 @@ WHERE e_location = 'libray 202';--spelled library wrong on purpose
 --3)
 .print " " 
 .print "query 3 " 
-.print "Show all users and the vents they have created"
+.print "Show all users and the events they have created"
 .print " " 
 
 select u_username as Host, e_name as EventName
@@ -130,3 +130,121 @@ Select DISTINCT u_username
 from users, event
 where userID = e_userID
 and e_eventDate < DATE('NOW');
+
+
+--12)
+.print " " 
+.print "query 12 " 
+.print "Shows all users who have not created any events"
+.print " "
+ --left join to show all null values of users with no events
+SELECT u_username
+FROM users u
+left join event e on u.userID = e.e_userID
+WHERE e.e_userID IS NULL;
+
+-- --13)
+-- .print " " 
+-- .print "query 13 " 
+-- .print "display user  who are  marked "going" for an event and the event names and date "  
+-- .print " "
+--believe we are not tracking which users are going to what events, maybe need to another table connecting to status, attendance: displaying event id and user id an a_status(0 or 1)
+
+
+
+
+--14) 
+.print " " 
+.print "query 14 " 
+.print "Shows all events along with their tags"
+.print " "
+
+
+--15)
+.print " "
+.print "query 15 "
+.print "Shows the total number of events happening at each location"
+.print " "
+
+SELECT e_location AS Location, COUNT(*) as TotalEvents
+
+FROM event 
+GROUP BY e_location;
+
+--16)
+.print " "
+.print "query 16 "
+.print "display the most popular event based on highest going count"
+.print " "
+
+
+SELECT e.e_name   AS Event, e.e_eventDate  AS Date, e.e_location AS Location, s.s_countGoing AS Going
+FROM event  e
+JOIN status s ON s.statusID = e.e_statusID
+ORDER BY s.s_countGoing DESC
+LIMIT 1;
+
+--17) 
+.print " "
+.print "query 17 "
+.print "show all events that are happening today"
+.print " "
+SELECT e_name      AS Event, e_eventDate AS Date, e_location  AS Location
+FROM event
+WHERE DATE(e_eventDate) = DATE('now');
+
+
+--18)
+.print " "
+.print "query 18 "
+.print "show all events that user 1 created "
+.print " "
+
+SELECT u.u_username  AS User,e.e_name   AS Event, e.e_eventDate AS Date,
+e.e_location  AS Location
+FROM users u
+JOIN event e ON e.e_userID = u.userID
+WHERE u.userID = 1;
+
+
+--19)
+.print " "
+.print "query 19 "
+.print "show all events that have more than 1 person maybe going  or going "
+.print " "
+
+SELECT e.e_name  AS Event, e.e_eventDate  AS Date, s.s_countGoing AS Going,
+s.s_maybeGoing AS MaybeGoing
+FROM event  e
+JOIN status s ON s.statusID = e.e_statusID
+WHERE s.s_countGoing  > 1
+OR s.s_maybeGoing > 1;
+
+
+--20)
+.print " "
+.print "query 20 "
+.print "show all users who have created more than 2 events in the  month of november 2025"
+
+
+SELECT u.u_username  AS User,
+       COUNT(e.eventID) AS numEvents
+FROM users u
+JOIN event e ON e.e_userID = u.userID
+WHERE e.e_eventDate >= '2025-11-01'
+  AND e.e_eventDate <  '2025-12-01'
+GROUP BY u.userID
+HAVING COUNT(e.eventID) > 2;
+
+
+--21) 
+.print " "
+.print "query 21 "
+.print "show all users who prefer tags of nature or music"
+
+
+SELECT DISTINCT u.u_username AS User, t.t_type  AS Tag
+FROM users       u
+JOIN preferences p ON p.p_userID = u.userID
+JOIN tags        t ON t.tagsID   = p.p_tagsID
+WHERE t.t_type IN ('nature', 'music')
