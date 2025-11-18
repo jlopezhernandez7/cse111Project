@@ -1,4 +1,4 @@
---1. A user updates their password
+    --1. A user updates their password
 UPDATE users SET u_password = 'new_secure_pass_ace' --from 'pass_ace'
 WHERE u_username = 'ace';
 

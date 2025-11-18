@@ -22,6 +22,7 @@ CREATE TABLE  users (
 CREATE TABLE event (
     eventID INTEGER PRIMARY KEY,
     e_eventDate DATE NOT NULL,
+    e_startTime TEXT NOT NULL,
     e_location VARCHAR(150),
     e_userID INTEGER,--fk to userss table
     e_type VARCHAR(50),
@@ -65,6 +66,7 @@ CREATE TABLE media (
 
 CREATE TABLE tags (
     tagsID INTEGER PRIMARY KEY,
+    t_startTime TEXT, 
     t_type VARCHAR(50),
     t_date VARCHAR(50),
     t_duration INTEGER,--minutes 

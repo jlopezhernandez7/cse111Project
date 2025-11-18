@@ -20,11 +20,11 @@ INSERT INTO users (u_username, u_email, u_password) VALUES
 
 -- EVENTS
 INSERT INTO event (e_eventDate, e_location, e_userID, e_type, e_name,
-                   e_duration, e_capacity, e_statusID)
+                   e_duration, e_capacity, e_statusID, e_startTime)
 VALUES
-('2025-11-20', 'Granite Pass 135', 1, 'anime',   'Anime Screening Night', 180, 80, 1),
-('2025-11-22', 'The Quad',         2, 'music',   'Guitar Jam on the Lawn', 120, 40, 2),
-('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25, 3);
+('2025-11-20', 'Granite Pass 135', 1, 'anime',   'Anime Screening Night', 180, 80, 1,'1:30pm '),
+('2025-11-22', 'The Quad',         2, 'music',   'Guitar Jam on the Lawn', 120, 40, 2, '2:30pm' ),
+('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25, 3, '4:30pm');
 
 
 
@@ -36,16 +36,19 @@ INSERT INTO status (s_countGoing, s_maybeGoing) VALUES
 
 
 -- TAGS  
-INSERT INTO tags (t_type, t_date, t_duration, t_capacity) VALUES
-('anime',  '2025-11-20',     NULL,  NULL),      -- tagsID = 1
-('anime',  '2025-11-20',     NULL,  50),        -- tagsID = 2
-('music',  NULL,             NULL,  40),        -- tagsID = 3
-('nature', NULL,             NULL,  NULL);     -- tagsID = 4
+INSERT INTO tags (t_type, t_date, t_duration, t_capacity, t_startTime) VALUES
+('anime',  '2025-11-20',     NULL,  NULL, '1:30pm'),      -- tagsID = 1
+('anime',  '2025-11-20',     NULL,  50, '2:30pm'),        -- tagsID = 2
+('music',  NULL,             NULL,  40 , NULL),        
+('nature', NULL,             NULL,  NULL, NULL),     -- tagsID = 
+
+(NULL ,  NULL,             NULL,  80 , NULL);
 
 -- CANCONNECT (Event ↔ Tag links)
 -- Event 1 is anime; Event 3 is music; Event 4 is nature
 INSERT INTO canconnect (c_eventID, c_tagsID) VALUES
 (1, 1),  -- Anime Screening ↔ anime
+(1,5),
 (2, 3),  -- Guitar Jam    ↔ music
 (3, 4);  -- Sunrise Hike  ↔ nature
 

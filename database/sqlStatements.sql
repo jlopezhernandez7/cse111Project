@@ -129,7 +129,8 @@ AND (t_duration > 60 or t_capacity > 20);
 Select DISTINCT u_username
 from users, event
 where userID = e_userID
-and e_eventDate < DATE('NOW');
+and e_eventDate < DATE('NOW'); --Empty because events havent passed yet if we flip sign,  future events will show
+
 
 
 --12)
@@ -156,8 +157,14 @@ WHERE e.e_userID IS NULL;
 --14) 
 .print " " 
 .print "query 14 " 
-.print "Shows all events along with their tags"
+.print "Shows events with all their tags "
 .print " "
+SELECT eventID, e_name as eventName, tagsID, t_type, t_date, t_capacity
+FROM event e
+JOIN canconnect c ON e.eventID = c.c_eventID 
+JOIN tags t ON c.c_tagsID = t.tagsID;
+
+
 
 
 --15)
