@@ -117,19 +117,19 @@ SELECT e_name AS Event, t_duration, t_capacity
 FROM event, tags, canconnect
 WHERE eventID = c_eventID
 AND tagsID = c_tagsID
-AND (t_duration > 60 or t_capacity > 20);
+AND (t_duration > 60 or t_capacity > 20); 
 
 --11)
 
 .print " " 
 .print "query 11 " 
-.print "Shows all users who have created a completed event"
+.print "Shows all users who have created a event that has passed "
 .print " "
 
 Select DISTINCT u_username
 from users, event
 where userID = e_userID
-and e_eventDate < DATE('NOW'); --Empty because events havent passed yet if we flip sign,  future events will show
+and e_eventDate < DATE('NOW', 'localtime'); --Empty because events havent passed yet if we flip sign,  future events will show
 
 
 
@@ -162,8 +162,8 @@ WHERE e.e_userID IS NULL;
 SELECT eventID, e_name as eventName, tagsID, t_type, t_date, t_capacity
 FROM event e
 JOIN canconnect c ON e.eventID = c.c_eventID 
-JOIN tags t ON c.c_tagsID = t.tagsID;
-
+JOIN tags t ON c.c_tagsID = t.tagsID
+ORDER BY eventID;
 
 
 
@@ -196,9 +196,9 @@ LIMIT 1;
 .print "query 17 "
 .print "show all events that are happening today"
 .print " "
-SELECT e_name      AS Event, e_eventDate AS Date, e_location  AS Location
-FROM event
-WHERE DATE(e_eventDate) = DATE('now');
+SELECT e_name      AS eventName, e_eventDate AS DateOfevent, e_location
+FROM event e
+WHERE e.e_eventDate = DATE('now', 'localtime'); --using pst not utc, utc messes the query up in our time
 
 
 --18)
@@ -231,7 +231,7 @@ OR s.s_maybeGoing > 1;
 --20)
 .print " "
 .print "query 20 "
-.print "show all users who have created more than 2 events in the  month of november 2025"
+.print "show all users who have created more than 1 events in the  month of november 2025"
 
 
 SELECT u.u_username  AS User,
@@ -241,7 +241,7 @@ JOIN event e ON e.e_userID = u.userID
 WHERE e.e_eventDate >= '2025-11-01'
   AND e.e_eventDate <  '2025-12-01'
 GROUP BY u.userID
-HAVING COUNT(e.eventID) > 2;
+HAVING COUNT(e.eventID) > 1;
 
 
 --21) 

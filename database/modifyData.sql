@@ -9,12 +9,12 @@ WHERE u_username = 'ace';
 --2 event modifications
 
 INSERT  OR IGNORE INTO event ( eventID, e_eventDate, e_location, e_userID,
-e_type, e_name, e_duration, e_capacity, e_statusID
+e_type, e_name, e_duration, e_capacity, e_statusID, e_startTime
 )
 VALUES (
-    4,'2025-11-30','COB2 170',1,'gaming','Minecraft Build Night', 
-    180, 60, 4                     
-);
+    4,'2025-11-18','COB2 170',1,'gaming','Minecraft Build Night', 
+    180, 60, 4, '5:00pm'                    
+), ( 5, '2025-11-17', 'The pav', 2, 'gaming', 'Movie Night', 100, 50, 5,'9:00pm');
 
 UPDATE event SET e_location = 'libray 202' --from Granite Pass 135
 WHERE eventID = 1;
@@ -26,7 +26,8 @@ WHERE e_type = 'nature' and e_name = 'Sunrise Hike';
 --create a new status row for a new event
 
 INSERT OR IGNORE INTO status (statusID, s_countGoing, s_maybeGoing)
-VALUES (4, 0, 0);   -- new status for the new event
+VALUES (4, 0, 0),
+(5,50,20);   -- new status for the new event
 
 --Add a new tag for Minecraft events
 INSERT OR IGNORE INTO tags (tagsID, t_type, t_date, t_duration, t_capacity)
@@ -36,7 +37,11 @@ VALUES (
     '2025-11-30',
     NULL,
     60
+
 );
+
+-- INSERT OR IGNORE INTO canconnect ( c_eventID, c_tagsID)
+
 
 
 

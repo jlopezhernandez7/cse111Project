@@ -27,7 +27,7 @@ VALUES
 ('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25, 3, '4:30pm');
 
 
-
+--change hour to 
 -- STATUS rows (one per event; counts start at 0)
 INSERT INTO status (s_countGoing, s_maybeGoing) VALUES
 (4, 5),  -- statusID = 1
@@ -37,20 +37,21 @@ INSERT INTO status (s_countGoing, s_maybeGoing) VALUES
 
 -- TAGS  
 INSERT INTO tags (t_type, t_date, t_duration, t_capacity, t_startTime) VALUES
-('anime',  '2025-11-20',     NULL,  NULL, '1:30pm'),      -- tagsID = 1
+('anime',  '2025-11-20',     180,  80, '1:30pm'),      -- tagsID = 1
 ('anime',  '2025-11-20',     NULL,  50, '2:30pm'),        -- tagsID = 2
-('music',  NULL,             NULL,  40 , NULL),        
-('nature', NULL,             NULL,  NULL, NULL),     -- tagsID = 
+('music',  '2025-11-22',  120,  40 , '2:30pm'),        
+('nature', NULL,             NULL,  NULL, NULL),   -- tagsID = 
+('study', NULL, NULL, NULL, NULL);
 
-(NULL ,  NULL,             NULL,  80 , NULL);
+
 
 -- CANCONNECT (Event ↔ Tag links)
 -- Event 1 is anime; Event 3 is music; Event 4 is nature
 INSERT INTO canconnect (c_eventID, c_tagsID) VALUES
 (1, 1),  -- Anime Screening ↔ anime
-(1,5),
 (2, 3),  -- Guitar Jam    ↔ music
-(3, 4);  -- Sunrise Hike  ↔ nature
+(3, 4), -- Sunrise Hike  ↔ nature
+(1,5);-- event with ultiple types
 
 
 
