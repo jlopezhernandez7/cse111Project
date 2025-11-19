@@ -103,7 +103,7 @@ order by Event;
 
 Select e_name AS Event, e_eventDate AS Date
 from event
-where e_eventDate BETWEEN DATE('now') and DATE('now', '+7 days')
+where e_eventDate BETWEEN DATE('now', 'localtime') and DATE('now', 'localtime', '+7 days')
 order by Date;
 
 --10)

@@ -51,7 +51,7 @@ INSERT INTO canconnect (c_eventID, c_tagsID) VALUES
 (1, 1),  -- Anime Screening ↔ anime
 (2, 3),  -- Guitar Jam    ↔ music
 (3, 4), -- Sunrise Hike  ↔ nature
-(1,5);-- event with ultiple types
+(1,5);-- 
 
 
 

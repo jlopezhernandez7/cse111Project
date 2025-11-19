@@ -30,17 +30,17 @@ VALUES (4, 0, 0),
 (5,50,20);   -- new status for the new event
 
 --Add a new tag for Minecraft events
-INSERT OR IGNORE INTO tags (tagsID, t_type, t_date, t_duration, t_capacity)
+INSERT OR IGNORE INTO tags (tagsID, t_type, t_date, t_duration, t_capacity,t_startTime)
 VALUES (
-    5,
-    'minecraft',
-    '2025-11-30',
-    NULL,
-    60
+    6,
+    'gaming',
+    '2025-11-18',
+    180, 60, '5:00pm'
 
-);
+),( 7, 'gaming', '2025-11-17', 100, 50, '9:00pm');
 
--- INSERT OR IGNORE INTO canconnect ( c_eventID, c_tagsID)
+INSERT OR IGNORE INTO canconnect ( c_eventID, c_tagsID)
+VALUES ( 4, 6), (5,7);
 
 
 
