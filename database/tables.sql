@@ -8,6 +8,9 @@ DROP TABLE IF EXISTS posts;
 DROP TABLE IF EXISTS canconnect;
 DROP TABLE IF EXISTS preferences;
 DROP TABLE IF EXISTS tags;
+DROP TABLE IF EXISTS attendance;
+
+
 
 
 CREATE TABLE  users (
@@ -28,19 +31,29 @@ CREATE TABLE event (
     e_type VARCHAR(50),
     e_name VARCHAR(100) NOT NULL,
     e_duration INTEGER,
-    e_capacity INTEGER, 
-    e_statusID INTEGER,--fk to status table
+    e_capacity INTEGER,
+    --fk to status table
     
-    FOREIGN KEY (e_userID) REFERENCES users(userID),
-    FOREIGN KEY (e_statusID) REFERENCES status(statusID)
+    FOREIGN KEY (e_userID) REFERENCES users(userID)
+
 
     -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE attendance (
+    attendID INTEGER PRIMARY KEY,
+    a_going BOOLEAN,
+    a_userID INTEGER,
+    FOREIGN KEY( a_userID) REFERENCES event(eventID)
+
+);
 CREATE TABLE status (
-    statusID INTEGER PRIMARY KEY,
-    s_countGoing INTEGER DEFAULT 0,
-    s_maybeGoing INTEGER DEFAULT 0
+     s_attendID INTEGER NOT NULL,
+     s_eventID INTEGER NOT NULL,
+     PRIMARY KEY(s_attendId, s_eventID),
+     FOREIGN KEY(s_attendID ) REFERENCES attendance(attendID),
+    FOREIGN KEY(s_eventID ) REFERENCES event(eventID)
+
     -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 

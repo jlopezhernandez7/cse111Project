@@ -6,6 +6,7 @@ DELETE FROM canconnect;
 DELETE FROM posts;
 DELETE FROM media;
 DELETE FROM preferences;
+DELETE FROM attendance;
 
 
 -- USERS
@@ -20,20 +21,19 @@ INSERT INTO users (u_username, u_email, u_password) VALUES
 
 -- EVENTS
 INSERT INTO event (e_eventDate, e_location, e_userID, e_type, e_name,
-                   e_duration, e_capacity, e_statusID, e_startTime)
+                   e_duration, e_capacity,  e_startTime)
 VALUES
-('2025-11-20', 'Granite Pass 135', 1, 'anime',   'Anime Screening Night', 180, 80, 1,'1:30pm '),
-('2025-11-22', 'The Quad',         2, 'music',   'Guitar Jam on the Lawn', 120, 40, 2, '2:30pm' ),
-('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25, 3, '4:30pm');
+('2025-11-20', 'Granite Pass 135', 1, 'anime',   'Anime Screening Night', 180, 80,'1:30pm '),
+('2025-11-22', 'The Quad',         2, 'music',   'Guitar Jam on the Lawn', 120, 40, '2:30pm' ),
+('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25,  '4:30pm');
 
-
+INSERT INTO attendance( a_going, a_userID)
+VALUES ( 1,1),(0,2);
 --change hour to 
 -- STATUS rows (one per event; counts start at 0)
-INSERT INTO status (s_countGoing, s_maybeGoing) VALUES
-(4, 5),  -- statusID = 1
-(2, 1),  -- statusID = 2
-(29, 13);  -- statusID = 3
-
+INSERT INTO status (s_eventID, s_attendID) VALUES
+(1,1),
+(1,2);
 
 -- TAGS  
 INSERT INTO tags (t_type, t_date, t_duration, t_capacity, t_startTime) VALUES

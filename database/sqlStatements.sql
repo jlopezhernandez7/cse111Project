@@ -149,7 +149,8 @@ WHERE e.e_userID IS NULL;
 -- .print "query 13 " 
 -- .print "display user  who are  marked "going" for an event and the event names and date "  
 -- .print " "
---believe we are not tracking which users are going to what events, maybe need to another table connecting to status, attendance: displaying event id and user id an a_status(0 or 1)
+--believe we are not tracking which users are going to what events, maybe need to another table connecting to status,
+-- attendance: displaying event id and user id an a_status(0 or 1)
 
 
 
@@ -217,15 +218,15 @@ WHERE u.userID = 1;
 --19)
 .print " "
 .print "query 19 "
-.print "show all events that have more than 1 person maybe going  or going "
+.print "show all events that have more than 10 person maybe going  or going "
 .print " "
 
 SELECT e.e_name  AS Event, e.e_eventDate  AS Date, s.s_countGoing AS Going,
 s.s_maybeGoing AS MaybeGoing
 FROM event  e
 JOIN status s ON s.statusID = e.e_statusID
-WHERE s.s_countGoing  > 1
-OR s.s_maybeGoing > 1;
+WHERE s.s_countGoing  > 10
+OR s.s_maybeGoing > 10;
 
 
 --20)
@@ -250,8 +251,30 @@ HAVING COUNT(e.eventID) > 1;
 .print "show all users who prefer tags of nature or music"
 
 
+
+
 SELECT DISTINCT u.u_username AS User, t.t_type  AS Tag
 FROM users       u
 JOIN preferences p ON p.p_userID = u.userID
 JOIN tags        t ON t.tagsID   = p.p_tagsID
-WHERE t.t_type IN ('nature', 'music')
+WHERE t.t_type IN ('nature', 'music');
+
+.print " "
+.print " "
+
+SELECT a_userID, e.eventID, a.a_going
+FROM attendance a 
+JOIN status s on a.attendID = s.s_attendID
+JOIN event e on s.s_eventID = e.eventID
+WHERE e.eventID = 1;
+
+
+
+
+
+
+
+
+
+
+
