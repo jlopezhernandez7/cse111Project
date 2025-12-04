@@ -1,6 +1,6 @@
 DELETE FROM users;
 DELETE FROM event;
-DELETE FROM status;
+-- DELETE FROM status;
 DELETE FROM tags;
 DELETE FROM canconnect;
 DELETE FROM posts;
@@ -27,13 +27,21 @@ VALUES
 ('2025-11-22', 'The Quad',         2, 'music',   'Guitar Jam on the Lawn', 120, 40, '2:30pm' ),
 ('2025-11-24', 'Lake Yosemite',    3, 'nature',  'Sunrise Hike',          180, 25,  '4:30pm');
 
-INSERT INTO attendance( a_going, a_userID)
-VALUES ( 1,1),(0,2);
+INSERT INTO attendance( a_userID, a_eventID, a_going )
+VALUES 
+(1, 1,1), --ace, anime screening night, going(1) 
+(2,2, 0),
+(1,2,0),
+(2,3, 1),
+(2,1, 1),
+(3,3,1),
+(1,3,1);
+
 --change hour to 
--- STATUS rows (one per event; counts start at 0)
-INSERT INTO status (s_eventID, s_attendID) VALUES
-(1,1),
-(1,2);
+
+-- INSERT INTO status (s_eventID, s_attendID) VALUES
+-- (1,1), -- event 1, attendID 1-- row 1 
+-- (1,2);
 
 -- TAGS  
 INSERT INTO tags (t_type, t_date, t_duration, t_capacity, t_startTime) VALUES

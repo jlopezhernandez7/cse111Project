@@ -9,7 +9,9 @@ DROP TABLE IF EXISTS canconnect;
 DROP TABLE IF EXISTS preferences;
 DROP TABLE IF EXISTS tags;
 DROP TABLE IF EXISTS attendance;
-
+--for some reason our old eventfinderDB.sqlite doesnt work with attendance table 
+-- so created new test dbs for now
+--
 
 
 
@@ -39,23 +41,24 @@ CREATE TABLE event (
 
     -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
-
+-- attendance junction table, M:N  for users and events 
 CREATE TABLE attendance (
-    attendID INTEGER PRIMARY KEY,
-    a_going BOOLEAN,
-    a_userID INTEGER,
-    FOREIGN KEY( a_userID) REFERENCES event(eventID)
-
+    a_userID   INTEGER NOT NULL,
+    a_eventID  INTEGER NOT NULL,
+    a_going    BOOLEAN NOT NULL,
+    PRIMARY KEY (a_userID, a_eventID),
+    FOREIGN KEY (a_userID) REFERENCES users(userID),
+    FOREIGN KEY (a_eventID) REFERENCES event(eventID)
 );
-CREATE TABLE status (
-     s_attendID INTEGER NOT NULL,
-     s_eventID INTEGER NOT NULL,
-     PRIMARY KEY(s_attendId, s_eventID),
-     FOREIGN KEY(s_attendID ) REFERENCES attendance(attendID),
-    FOREIGN KEY(s_eventID ) REFERENCES event(eventID)
+-- CREATE TABLE status (
+--      s_attendID INTEGER NOT NULL,
+--      s_eventID INTEGER NOT NULL,
+--      PRIMARY KEY(s_attendId, s_eventID),
+--      FOREIGN KEY(s_attendID ) REFERENCES attendance(attendID),
+--     FOREIGN KEY(s_eventID ) REFERENCES event(eventID)
 
-    -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+--     -- created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+-- );
 
 CREATE TABLE posts (
     postID INTEGER PRIMARY KEY,

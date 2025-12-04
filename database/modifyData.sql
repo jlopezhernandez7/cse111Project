@@ -10,7 +10,8 @@ WHERE u_username = 'ace';
 
 INSERT  OR IGNORE INTO event ( eventID, e_eventDate, e_location, e_userID,
 e_type, e_name, e_duration, e_capacity, e_statusID, e_startTime
-)
+)--old statusID column was removed when doing the attendance swich for status table 
+-- so of this code will not run since it follows the old logic of status with one to one relationship 
 VALUES (
     4,'2025-11-18','COB2 170',1,'gaming','Minecraft Build Night', 
     180, 60, 4, '5:00pm'                    
