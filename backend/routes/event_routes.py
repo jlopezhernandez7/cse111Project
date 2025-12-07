@@ -112,15 +112,32 @@ def get_event(event_id):
 def update_event(event_id):
     event = Event.query.get_or_404(event_id)
 
+    # only creator can edit
     if event.e_userID != g.current_user.userID:
         return jsonify({"error": "You can only edit your own events"}), 403
 
     data = request.get_json() or {}
 
-  
     if "name" in data:
         event.e_name = data["name"]
-    # etc.
+    if "date" in data:
+        event.e_eventDate = data["date"]
+    if "startTime" in data:
+        event.e_startTime = data["startTime"]
+    if "location" in data:
+        event.e_location = data["location"]
+    if "type" in data:
+        event.e_type = data["type"]
+    if "duration" in data:
+        event.e_duration = data["duration"]
+    if "capacity" in data:
+        event.e_capacity = data["capacity"]
+
+    # optional: update tags if you send tagIDs in the payload
+    tag_ids = data.get("tagIDs")
+    if tag_ids is not None:
+        tags = Tag.query.filter(Tag.tagsID.in_(tag_ids)).all()
+        event.tags = tags
 
     db.session.commit()
     return jsonify(event_to_dict(event))

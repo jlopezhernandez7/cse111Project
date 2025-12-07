@@ -37,6 +37,17 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     app.config["SECRET_KEY"] = SECRET_KEY
+    
+    
+    
+        # IMPORTANT: cookie settings for cross-site (Vercel ↔ Render)
+    if os.getenv("FLASK_ENV") == "production":
+        app.config["SESSION_COOKIE_SAMESITE"] = "None"
+        app.config["SESSION_COOKIE_SECURE"] = True
+    else:
+        # local dev: easier to keep default
+        app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
+        app.config["SESSION_COOKIE_SECURE"] = Fals
 
     # Init extensions
     db.init_app(app)
