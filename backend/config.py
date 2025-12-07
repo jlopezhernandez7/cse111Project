@@ -32,6 +32,7 @@ def create_app():
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret-change-me")
 
     FRONTEND_URL = os.getenv("FRONTEND_URL")
+    FLASK_ENV = os.getenv("FLASK_ENV", "development")
 
     # Flask config
     app.config["SQLALCHEMY_DATABASE_URI"] = DATABASE_URL
@@ -40,18 +41,17 @@ def create_app():
     
     
     
+    
         # IMPORTANT: cookie settings for cross-site (Vercel ↔ Render)
-    if os.getenv("FLASK_ENV") == "production":
+    if FLASK_ENV == "production":
         app.config["SESSION_COOKIE_SAMESITE"] = "None"
         app.config["SESSION_COOKIE_SECURE"] = True
     else:
-        # local dev: easier to keep default
         app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
         app.config["SESSION_COOKIE_SECURE"] = False
-
     # Init extensions
-    db.init_app(app)
     CORS(app, origins=[FRONTEND_URL], supports_credentials=True)
+    db.init_app(app)
 
     # Register blueprints here (apids )
     # from routes.event_routes import event_bp
