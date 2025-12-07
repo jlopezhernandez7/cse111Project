@@ -100,35 +100,37 @@ function App() {
     setLoginForm((prev) => ({ ...prev, [name]: value }));
   }
 
-  async function handleLogin(e) {
-    e.preventDefault();
-    setAuthError("");
-    setAuthLoading(true);
-    try {
-      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
-        method: "POST",
-        credentials: "include", // send/receive session cookie
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          email: loginForm.email,
-          password: loginForm.password,
-        }),
-      });
+async function handleLogin(e) {
+  e.preventDefault();
+  setAuthError("");
+  setAuthLoading(true);
+  try {
+    const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: loginForm.email,
+        password: loginForm.password,
+      }),
+    });
 
-      const data = await res.json().catch(() => null);
-      if (!res.ok) {
-        throw new Error(data?.error || `Login failed (${res.status})`);
-      }
-
-      setUser(data.user);
-      setLoginForm({ email: "", password: "" });
-    } catch (err) {
-      console.error(err);
-      setAuthError(err.message || "Login failed");
-    } finally {
-      setAuthLoading(false);
+    const data = await res.json().catch(() => null);
+    if (!res.ok) {
+      throw new Error(data?.error || `Login failed (${res.status})`);
     }
+
+    // 🔑 Only trust the session cookie
+    await fetchCurrentUser();   // this reads /api/auth/me and sets user if cookie works
+    setLoginForm({ email: "", password: "" });
+  } catch (err) {
+    console.error(err);
+    setAuthError(err.message || "Login failed");
+  } finally {
+    setAuthLoading(false);
   }
+}
+
 
   async function handleLogout() {
     try {
@@ -269,37 +271,55 @@ function App() {
       setEventsError(err.message || "Failed to delete event");
     }
   }
-  async function handleSignup(e) {
+async function handleSignup(e) {
   e.preventDefault();
   setSignupError("");
 
   try {
+    // 1) Create user account
     const res = await fetch(`${API_BASE_URL}/api/users/`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      credentials: "include",
+      credentials: "include", // allow backend to set session cookie
       body: JSON.stringify({
         username: signupForm.username,
         email: signupForm.email,
         password: signupForm.password,
       }),
-    })
+    });
 
-    const data = await res.json();
+    const data = await res.json().catch(() => null);
 
     if (!res.ok) {
-      throw new Error(data.error || "Failed to create account");
+      throw new Error(data?.error || "Failed to create account");
     }
 
-    // Success → log the user in automatically
-    setUser(data);
-    setShowSignup(false);
-    setSignupForm({ username: "", email: "", password: "" });
+    // 2) Now verify that the backend actually logged us in
+    const meRes = await fetch(`${API_BASE_URL}/api/auth/me`, {
+      method: "GET",
+      credentials: "include",
+    });
 
+    if (meRes.ok) {
+      // Session cookie worked! We are logged in.
+      const meData = await meRes.json();
+      setUser(meData.user);
+
+      // Clear signup modal
+      setSignupForm({ username: "", email: "", password: "" });
+      setShowSignup(false);
+    } else {
+      // Cookie blocked → user NOT logged in
+      throw new Error(
+        "Signup succeeded, but login session was not created. Your browser may be blocking cookies."
+      );
+    }
   } catch (err) {
-    setSignupError(err.message);
+    console.error(err);
+    setSignupError(err.message || "Signup failed");
   }
 }
+
     async function fetchMyAttendance() {
       if (!user) {
         setJoinedEventIds([]);
