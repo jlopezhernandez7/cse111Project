@@ -1,6 +1,6 @@
 # backend/routes/user_routes.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, session
 from models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -40,5 +40,7 @@ def create_user():
     user = User(u_username=username, u_email=email, u_password=hashed)
     db.session.add(user)
     db.session.commit()
+    
+    session["user_id"] = user.userID
 
     return jsonify(user_to_dict(user)), 201
