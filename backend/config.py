@@ -47,7 +47,7 @@ def create_app():
     else:
         # local dev: easier to keep default
         app.config["SESSION_COOKIE_SAMESITE"] = "Lax"
-        app.config["SESSION_COOKIE_SECURE"] = Fals
+        app.config["SESSION_COOKIE_SECURE"] = False
 
     # Init extensions
     db.init_app(app)
