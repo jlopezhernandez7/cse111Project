@@ -19,3 +19,17 @@ will be kept under requirements.txt, which we can later run if we add more to ha
 pip freeze > requirements.txt -- to store dependencies/packages
 
 ----
+
+to run frontend  
+
+cd frontend
+ 
+npm install
+
+
+npm run dev 
+
+
+databse url 
+
+has to be the complete path where it is stored 
