@@ -26,6 +26,19 @@ function App() {
     type: "",
   });
 
+  // ---------- Search and filter state ----------
+  const [searchTerm, setSearchTerm] = useState("");
+  const [filter, setFilter] = useState("all");
+  const filteredEvents = events
+    .filter(ev =>
+      ev.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (ev.location && ev.location.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (ev.type && ev.type.toLowerCase().includes(searchTerm.toLowerCase()))
+    )
+    .filter(ev => filter === "all" || (ev.type && ev.type.toLowerCase() === filter.toLowerCase()));
+
+
+
   const [showSignup, setShowSignup] = useState(false);
   const [signupForm, setSignupForm] = useState({
     username: "",
@@ -835,7 +848,30 @@ async function handleLeave(eventId) {
       {/* Event list (feed) */}
       <section>
         <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <h2 style={{ margin: 0 }}>Events</h2>
+          <h2 style={{ margin: 0 }}>Events</h2>         
+            <input
+              type="text"
+              placeholder="Search events..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{
+                padding: "8px 10px",
+                border: "1px solid #000000ff",
+                borderRadius: "6px",
+                flex: 1 
+              }}
+            />
+            <select
+              value={filter}
+              onChange={(e) => setFilter(e.target.value)}
+              style={{ padding: "6px", borderRadius: "4px" }}
+            >
+              <option value="all">All Types</option>
+              <option value="anime">anime</option>
+              <option value="study group">study group</option>
+              <option value="gaming">gaming</option>
+              <option value="movies">movies</option>
+            </select>
           <button onClick={fetchEvents} disabled={eventsLoading}>
             {eventsLoading ? "Refreshing..." : "Refresh"}
           </button>
@@ -849,7 +885,7 @@ async function handleLeave(eventId) {
 
         <ul style={{ listStyle: "none", padding: 0, marginTop: 16 }}>
 
-          {events.map((ev) => {
+          {filteredEvents.map((ev) => {
             const isCreator =
               user && ev.creator && ev.creator.userID === user.userID;
 
