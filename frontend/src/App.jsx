@@ -1,8 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || "";
-
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 function App() {
   // ---------- auth state ---
   const [user, setUser] = useState(null);
