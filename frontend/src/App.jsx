@@ -395,28 +395,11 @@ async function handleLeave(eventId) {
   // ---------- UI ----------
 
   return (
-    <div
-      className="App"
-      style={{
-        maxWidth: 900,
-        margin: "0 auto",
-        padding: 16,
-        display: "flex",
-        flexDirection: "column",
-        gap: 16,
-      }}
-    >
+    <div className="App">
       {/* Header / Auth section */}
-      <header
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          gap: 16,
-          alignItems: "flex-start",
-        }}
-      >
+      <header>
         <div>
-          <h1 style={{ marginBottom: 4 }}>Event Feed (Test)</h1>
+          <h1>Event Feed (Test)</h1>
           <p style={{ fontSize: 14, color: "#666", marginTop: 0 }}>
             Uses Flask backend with session-based login and creator-only
             editing.
@@ -426,7 +409,7 @@ async function handleLeave(eventId) {
         <div
           style={{
             minWidth: 260,
-            border: "1px solid #ddd",
+            border: "1px solid #000a42ff",
             borderRadius: 8,
             padding: 12,
           }}
@@ -444,7 +427,7 @@ async function handleLeave(eventId) {
             </>
           ) : (
             <>
-              <h3 style={{ marginTop: 0 }}>Login</h3>
+              <h3 style={{ marginTop: 0 }}></h3>
               {authError && (
                 <div
                   style={{
@@ -464,7 +447,53 @@ async function handleLeave(eventId) {
                 onSubmit={handleLogin}
                 style={{ display: "grid", gap: 8, fontSize: 14 }}
               >
-                      <button
+                      
+
+                <label style={{display: "flex", 
+                  justifyContent: "space-between", 
+                  alignItems: "center" 
+                }}>
+                  Email
+                  <input
+                    type="email"
+                    name="email"
+                    value={loginForm.email}
+                    onChange={handleLoginFormChange}
+                    placeholder="you@example.com"
+                    style={{
+                      border: "1px solid #000000ff",   
+                      borderRadius: "6px",           
+                      padding: "8px",           
+                      backgroundColor: "#f9f9f9",    
+                      color: "#333",                 
+                    }}/>
+                </label>
+                <label style={{display: "flex", 
+                  justifyContent: "space-between", 
+                  alignItems: "center" 
+                }}>
+                  Password
+                  <input 
+                    type="password"
+                    name="password"
+                    value={loginForm.password}
+                    onChange={handleLoginFormChange}
+                    placeholder="••••••••"
+                    style={{
+                      border: "1px solid #000000ff",   
+                      borderRadius: "6px",           
+                      padding: "8px",           
+                      backgroundColor: "#f9f9f9",    
+                      color: "#333",                 
+                    }}/>
+                </label>
+                <button type="submit" disabled={authLoading}
+                style={{ backgroundColor: "darkblue", color: "white" }}
+                >
+                  {authLoading ? "Logging in..." : "Login"}
+                </button>
+                <p>or</p>
+                <button
                         type="button"
                         onClick={() => setShowSignup(true)}
                         style={{
@@ -479,30 +508,6 @@ async function handleLeave(eventId) {
                               >
                                 Create Account
                       </button>
-
-                <label>
-                  Email
-                  <input
-                    type="email"
-                    name="email"
-                    value={loginForm.email}
-                    onChange={handleLoginFormChange}
-                    placeholder="you@example.com"
-                  />
-                </label>
-                <label>
-                  Password
-                  <input
-                    type="password"
-                    name="password"
-                    value={loginForm.password}
-                    onChange={handleLoginFormChange}
-                    placeholder="••••••••"
-                  />
-                </label>
-                <button type="submit" disabled={authLoading}>
-                  {authLoading ? "Logging in..." : "Login"}
-                </button>
               </form>
               <p style={{ fontSize: 11, color: "#888", marginTop: 8 }}>
                 (Use a test user you created via the backend / API.)
@@ -534,7 +539,7 @@ async function handleLeave(eventId) {
         border: "1px solid #444",
       }}
     >
-      <h3 style={{ marginTop: 0 }}>Create Account</h3>
+      <h3 style={{ marginTop: 0, color:"white" }}>Create Account</h3>
 
       {signupError && (
         <div
@@ -554,8 +559,14 @@ async function handleLeave(eventId) {
         onSubmit={handleSignup}
         style={{ display: "grid", gap: "10px" }}
       >
-        <label>
-          Username
+        <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 12,
+          textIndent: "40px"
+        }}>
+          <span style={{ color: "white" }}>Username</span>
           <input
             type="text"
             name="username"
@@ -563,11 +574,24 @@ async function handleLeave(eventId) {
             onChange={handleSignupChange}
             placeholder="CoolUser123"
             required
-          />
+            style={{
+              border: "2px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
+            />
         </label>
 
-        <label>
-          Email
+        <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 45,
+          textIndent: "40px"
+        }}>
+          <span style={{ color: "white" }}>Email</span>
           <input
             type="email"
             name="email"
@@ -575,11 +599,24 @@ async function handleLeave(eventId) {
             onChange={handleSignupChange}
             placeholder="you@example.com"
             required
-          />
+            style={{
+              border: "2px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
+            />
         </label>
 
-        <label>
-          Password
+        <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 16,
+          textIndent: "40px"
+        }}>
+          <span style={{ color: "white" }}>Password</span>
           <input
             type="password"
             name="password"
@@ -587,10 +624,18 @@ async function handleLeave(eventId) {
             onChange={handleSignupChange}
             placeholder="StrongPassword"
             required
+            style={{
+              border: "2px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+            }}
           />
         </label>
 
-        <button type="submit" style={{ marginTop: "10px" }}>
+        <button type="submit" style={{ marginTop: "10px", backgroundColor: "darkblue", color: "white" }}
+        >
           Create Account
         </button>
 
@@ -599,7 +644,7 @@ async function handleLeave(eventId) {
           onClick={() => setShowSignup(false)}
           style={{
             marginTop: "8px",
-            background: "#222",
+            background: "#ffffffff",
             padding: "8px",
             borderRadius: "6px",
           }}
@@ -649,7 +694,13 @@ async function handleLeave(eventId) {
           onSubmit={handleEventSubmit}
           style={{ display: "grid", gap: 8, maxWidth: 500 }}
         >
-          <label>
+          <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 123,
+          textIndent: "140px"
+          }}>
             Name*
             <input
               type="text"
@@ -658,10 +709,23 @@ async function handleLeave(eventId) {
               onChange={handleEventFormChange}
               placeholder="Smash Tournament"
               disabled={!user}
+              style={{
+              border: "1px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
             />
           </label>
 
-          <label>
+          <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 19,
+          textIndent: "140px"
+          }}>
             Date* (YYYY-MM-DD)
             <input
               type="text"
@@ -670,10 +734,23 @@ async function handleLeave(eventId) {
               onChange={handleEventFormChange}
               placeholder="2025-11-30"
               disabled={!user}
+              style={{
+              border: "1px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
             />
           </label>
 
-          <label>
+          <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 25,
+          textIndent: "140px"
+          }}>
             Start Time* (HH:MM)
             <input
               type="text"
@@ -682,10 +759,23 @@ async function handleLeave(eventId) {
               onChange={handleEventFormChange}
               placeholder="18:00"
               disabled={!user}
+              style={{
+              border: "1px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
             />
           </label>
 
-          <label>
+          <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 112,
+          textIndent: "140px"
+          }}>
             Location
             <input
               type="text"
@@ -694,10 +784,23 @@ async function handleLeave(eventId) {
               onChange={handleEventFormChange}
               placeholder="COB2 170"
               disabled={!user}
+              style={{
+              border: "1px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
             />
           </label>
 
-          <label>
+          <label
+          style={{
+          display: "flex",
+          alignItems: "center",
+          gap: 139,
+          textIndent: "140px"
+          }}>
             Type
             <input
               type="text"
@@ -706,6 +809,13 @@ async function handleLeave(eventId) {
               onChange={handleEventFormChange}
               placeholder="gaming / study group / ..."
               disabled={!user}
+              style={{
+              border: "1px solid #000000ff",   
+              borderRadius: "6px",           
+              padding: "8px",           
+              backgroundColor: "#f9f9f9",    
+              color: "#333",                 
+              }}
             />
           </label>
 
@@ -831,3 +941,4 @@ async function handleLeave(eventId) {
 }
 
 export default App;
+

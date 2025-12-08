@@ -3,6 +3,7 @@
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  background-color: rgb(8, 8, 82);
 }
 
 .logo {
@@ -39,4 +40,26 @@
 
 .read-the-docs {
   color: #888;
+}
+
+.App {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  background-color: rgb(255, 255, 255);
+  
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: flex-start;
+}
+
+h1 {
+  margin-bottom: 4px;
 }
