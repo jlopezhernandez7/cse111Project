@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "https://cse111projectbackend.onrender.com/api/:path*"
+    }
+  ]
+}
