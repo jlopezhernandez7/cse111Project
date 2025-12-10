@@ -26,6 +26,9 @@ function App() {
     type: "",
   });
 
+  const [showCreateEvent, setShowCreateEvent] = useState(false);
+
+
   // ---------- Search and filter state ----------
   const [searchTerm, setSearchTerm] = useState("");
   const [filter, setFilter] = useState("all");
@@ -408,572 +411,201 @@ async function handleLeave(eventId) {
   // ---------- UI ----------
 
   return (
-    <div className="App">
-      {/* Header / Auth section */}
-      <header>
-        <div>
-          <h1>Event Feed (Test)</h1>
-          <p style={{ fontSize: 14, color: "#666", marginTop: 0 }}>
-            Uses Flask backend with session-based login and creator-only
-            editing.
-          </p>
-        </div>
-
-        <div
-          style={{
-            minWidth: 260,
-            border: "1px solid #000a42ff",
-            borderRadius: 8,
-            padding: 12,
-          }}
-        >
-          {user ? (
-            <>
-              <div style={{ marginBottom: 8 }}>
-                <strong>Logged in as</strong>
-                <div>{user.username}</div>
-                <div style={{ fontSize: 12, color: "#666" }}>{user.email}</div>
-              </div>
-              <button onClick={handleLogout} disabled={authLoading}>
-                Logout
-              </button>
-            </>
-          ) : (
-            <>
-              <h3 style={{ marginTop: 0 }}></h3>
-              {authError && (
-                <div
-                  style={{
-                    backgroundColor: "#ffe5e5",
-                    color: "#b00020",
-                    padding: "4px 8px",
-                    borderRadius: 4,
-                    marginBottom: 8,
-                    fontSize: 13,
-                  }}
-                >
-                  {authError}
-                </div>
-              )}
-              
-              <form
-                onSubmit={handleLogin}
-                style={{ display: "grid", gap: 8, fontSize: 14 }}
-              >
-                      
-
-                <label style={{display: "flex", 
-                  justifyContent: "space-between", 
-                  alignItems: "center" 
-                }}>
-                  Email
-                  <input
-                    type="email"
-                    name="email"
-                    value={loginForm.email}
-                    onChange={handleLoginFormChange}
-                    placeholder="you@example.com"
-                    style={{
-                      border: "1px solid #000000ff",   
-                      borderRadius: "6px",           
-                      padding: "8px",           
-                      backgroundColor: "#f9f9f9",    
-                      color: "#333",                 
-                    }}/>
-                </label>
-                <label style={{display: "flex", 
-                  justifyContent: "space-between", 
-                  alignItems: "center" 
-                }}>
-                  Password
-                  <input 
-                    type="password"
-                    name="password"
-                    value={loginForm.password}
-                    onChange={handleLoginFormChange}
-                    placeholder="••••••••"
-                    style={{
-                      border: "1px solid #000000ff",   
-                      borderRadius: "6px",           
-                      padding: "8px",           
-                      backgroundColor: "#f9f9f9",    
-                      color: "#333",                 
-                    }}/>
-                </label>
-                <button type="submit" disabled={authLoading}
-                style={{ backgroundColor: "darkblue", color: "white" }}
-                >
-                  {authLoading ? "Logging in..." : "Login"}
-                </button>
-                <p>or</p>
-                <button
-                        type="button"
-                        onClick={() => setShowSignup(true)}
-                        style={{
-                          marginTop: "8px",
-                          width: "100%",
-                          background: "#222",
-                          color: "white",
-                          padding: "8px",
-                          borderRadius: "6px",
-                          border: "1px solid #444",
-                                }}
-                              >
-                                Create Account
-                      </button>
-              </form>
-              <p style={{ fontSize: 11, color: "#888", marginTop: 8 }}>
-                (Use a test user you created via the backend / API.)
-              </p>
-
-              
-            </>
-          )}
-        </div>
-
-        {showSignup && (
-  <div
-    style={{
-      position: "fixed",
-      inset: 0,
-      background: "rgba(0,0,0,0.7)",
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-      zIndex: 1000,
-    }}
-  >
-    <div
-      style={{
-        width: "350px",
-        background: "#111",
-        padding: "20px",
-        borderRadius: "10px",
-        border: "1px solid #444",
-      }}
-    >
-      <h3 style={{ marginTop: 0, color:"white" }}>Create Account</h3>
-
-      {signupError && (
-        <div
-          style={{
-            backgroundColor: "#ffdddd",
-            color: "#b00020",
-            padding: "6px",
-            borderRadius: "4px",
-            marginBottom: "10px",
-          }}
-        >
-          {signupError}
-        </div>
-      )}
-
-      <form
-        onSubmit={handleSignup}
-        style={{ display: "grid", gap: "10px" }}
-      >
-        <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 12,
-          textIndent: "40px"
-        }}>
-          <span style={{ color: "white" }}>Username</span>
-          <input
-            type="text"
-            name="username"
-            value={signupForm.username}
-            onChange={handleSignupChange}
-            placeholder="CoolUser123"
-            required
-            style={{
-              border: "2px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
-            />
-        </label>
-
-        <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 45,
-          textIndent: "40px"
-        }}>
-          <span style={{ color: "white" }}>Email</span>
-          <input
-            type="email"
-            name="email"
-            value={signupForm.email}
-            onChange={handleSignupChange}
-            placeholder="you@example.com"
-            required
-            style={{
-              border: "2px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
-            />
-        </label>
-
-        <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 16,
-          textIndent: "40px"
-        }}>
-          <span style={{ color: "white" }}>Password</span>
-          <input
-            type="password"
-            name="password"
-            value={signupForm.password}
-            onChange={handleSignupChange}
-            placeholder="StrongPassword"
-            required
-            style={{
-              border: "2px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-            }}
-          />
-        </label>
-
-        <button type="submit" style={{ marginTop: "10px", backgroundColor: "darkblue", color: "white" }}
-        >
-          Create Account
-        </button>
-
-        <button
-          type="button"
-          onClick={() => setShowSignup(false)}
-          style={{
-            marginTop: "8px",
-            background: "#ffffffff",
-            padding: "8px",
-            borderRadius: "6px",
-          }}
-        >
-          Cancel
-        </button>
-      </form>
-    </div>
-  </div>
-)}
-
-      </header>
-
-      {/* Error / status for events */}
-      {eventsError && (
-        <div
-          style={{
-            backgroundColor: "#ffe5e5",
-            color: "#b00020",
-            padding: "8px 12px",
-            borderRadius: 4,
-          }}
-        >
-          {eventsError}
-        </div>
-      )}
-
-      {/* Create / update form (only if logged in) */}
-      <section
-        style={{
-          border: "1px solid #ddd",
-          borderRadius: 8,
-          padding: 16,
-        }}
-      >
-        <h2 style={{ marginTop: 0 }}>
-          {editingId === null ? "Create Event" : `Edit Event #${editingId}`}
-        </h2>
-
-        {!user && (
-          <p style={{ fontSize: 14, color: "#666" }}>
-            You must be logged in to create or edit events.
-          </p>
+  <div className="app">
+    {/* ---------- Header ---------- */}
+    <header className="app-header">
+      <h1>Campus Events - University Event Finder</h1>
+      <div className="auth-controls">
+        {user ? (
+          <>
+            <span>Welcome, {user.username}</span>
+            <button onClick={handleLogout}>Logout</button>
+          </>
+        ) : (
+          <>
+            <form onSubmit={handleLogin} className="login-form">
+              <input
+                type="email"
+                name="email"
+                value={loginForm.email}
+                onChange={handleLoginFormChange}
+                placeholder="Email"
+              />
+              <input
+                type="password"
+                name="password"
+                value={loginForm.password}
+                onChange={handleLoginFormChange}
+                placeholder="Password"
+              />
+              <button type="submit" disabled={authLoading}>Login</button>
+              {authError && <p className="error">{authError}</p>}
+            </form>
+            <button onClick={() => setShowSignup(true)}>Sign Up</button>
+          </>
         )}
+      </div>
+    </header>
+    
 
-        <form
-          onSubmit={handleEventSubmit}
-          style={{ display: "grid", gap: 8, maxWidth: 500 }}
-        >
-          <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 123,
-          textIndent: "140px"
-          }}>
-            Name*
+    {/* ---------- Search + Filters ---------- */}
+    <section className="filters">
+      <input
+        type="text"
+        placeholder="Search by title, description, or location..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+      />
+      <div className="filter-buttons">
+        {["all", "study", "sports", "social", "volunteer", "other"].map((cat) => (
+          <button
+            key={cat}
+            className={filter === cat ? "active" : ""}
+            onClick={() => setFilter(cat)}
+          >
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </button>
+        ))}
+      </div>
+      {/* Date filter dropdown */}
+      <select>
+        <option>All Events</option>
+        {/* later: add date range options */}
+      </select>
+    </section>
+
+  {user && (
+      <button onClick={() => setShowCreateEvent(true)} className="create-event-btn">
+      + Create Event
+      </button>
+      )}
+
+      {showCreateEvent && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Create Event</h2>
+          <form onSubmit={handleEventSubmit}>
             <input
               type="text"
               name="name"
               value={formData.name}
               onChange={handleEventFormChange}
-              placeholder="Smash Tournament"
-              disabled={!user}
-              style={{
-              border: "1px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
+              placeholder="Event name"
+              required
             />
-          </label>
-
-          <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 19,
-          textIndent: "140px"
-          }}>
-            Date* (YYYY-MM-DD)
             <input
-              type="text"
+              type="date"
               name="date"
               value={formData.date}
               onChange={handleEventFormChange}
-              placeholder="2025-11-30"
-              disabled={!user}
-              style={{
-              border: "1px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
+              required
             />
-          </label>
-
-          <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 25,
-          textIndent: "140px"
-          }}>
-            Start Time* (HH:MM)
             <input
-              type="text"
+              type="time"
               name="startTime"
               value={formData.startTime}
               onChange={handleEventFormChange}
-              placeholder="18:00"
-              disabled={!user}
-              style={{
-              border: "1px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
+              required
             />
-          </label>
-
-          <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 112,
-          textIndent: "140px"
-          }}>
-            Location
             <input
               type="text"
               name="location"
               value={formData.location}
               onChange={handleEventFormChange}
-              placeholder="COB2 170"
-              disabled={!user}
-              style={{
-              border: "1px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
+              placeholder="Location"
             />
-          </label>
-
-          <label
-          style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 139,
-          textIndent: "140px"
-          }}>
-            Type
-            <input
-              type="text"
+            <select
               name="type"
               value={formData.type}
               onChange={handleEventFormChange}
-              placeholder="gaming / study group / ..."
-              disabled={!user}
-              style={{
-              border: "1px solid #000000ff",   
-              borderRadius: "6px",           
-              padding: "8px",           
-              backgroundColor: "#f9f9f9",    
-              color: "#333",                 
-              }}
-            />
-          </label>
+            >
+              <option value="">Select category</option>
+              <option value="study">Study</option>
+              <option value="sports">Sports</option>
+              <option value="social">Social</option>
+              <option value="volunteer">Volunteer</option>
+              <option value="other">Other</option>
+            </select>
 
-          <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-            <button type="submit" disabled={!user}>
-              {editingId === null ? "Create" : "Save changes"}
-            </button>
-            {editingId !== null && (
-              <button type="button" onClick={handleCancelEdit}>
+            <div className="modal-actions">
+              <button type="submit">Save Event</button>
+              <button type="button" onClick={() => setShowCreateEvent(false)}>
                 Cancel
               </button>
-            )}
-          </div>
-        </form>
-      </section>
-
-      {/* Event list (feed) */}
-      <section>
-        <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-          <h2 style={{ margin: 0 }}>Events</h2>         
-            <input
-              type="text"
-              placeholder="Search events..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              style={{
-                padding: "8px 10px",
-                border: "1px solid #000000ff",
-                borderRadius: "6px",
-                flex: 1 
-              }}
-            />
-            <select
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
-              style={{ padding: "6px", borderRadius: "4px" }}
-            >
-              <option value="all">All Types</option>
-              <option value="anime">anime</option>
-              <option value="study group">study group</option>
-              <option value="gaming">gaming</option>
-              <option value="movies">movies</option>
-            </select>
-          <button onClick={fetchEvents} disabled={eventsLoading}>
-            {eventsLoading ? "Refreshing..." : "Refresh"}
-          </button>
+            </div>
+          </form>
         </div>
+      </div>
+      )}
+    {/* ---------- Events List ---------- */}
+    <main className="events-list">
+      {eventsLoading && <p>Loading events...</p>}
+      {eventsError && <p className="error">{eventsError}</p>}
+      {filteredEvents.map((ev) => (
+        <div className="event-card" key={ev.eventID}>
+          <h3>{ev.name}</h3>
+          <p className="event-category">{ev.type}</p>
+          <p>{ev.description}</p>
+          <p>
+            <strong>Date:</strong> {ev.date} <br />
+            <strong>Time:</strong> {ev.startTime} <br />
+            <strong>Location:</strong> {ev.location}
+          </p>
+          <p>
+            <strong>Attendance:</strong>{" "}
+            {ev.attendees?.length || 0} / {ev.maxAttendees || "∞"}
+          </p>
+          <p><em>Created by {ev.creator?.username}</em></p>
 
-        {eventsLoading && events.length === 0 && <p>Loading events...</p>}
+          {joinedEventIds.includes(ev.eventID) ? (
+            <button onClick={() => handleLeave(ev.eventID)}>Leave Event</button>
+          ) : (
+            <button onClick={() => handleJoin(ev.eventID)}>Join Event</button>
+          )}
 
-        {!eventsLoading && events.length === 0 && (
-          <p style={{ marginTop: 12 }}>No events yet. Add one above!</p>
-        )}
+          {user?.userID === ev.creator?.userID && (
+            <>
+              <button onClick={() => handleEditClick(ev)}>Edit</button>
+              <button onClick={() => handleDelete(ev.eventID, ev)}>Delete</button>
+            </>
+          )}
+        </div>
+      ))}
+    </main>
 
-        <ul style={{ listStyle: "none", padding: 0, marginTop: 16 }}>
-
-          {filteredEvents.map((ev) => {
-            const isCreator =
-              user && ev.creator && ev.creator.userID === user.userID;
-
-              
-            const isJoined = joinedEventIds.includes(ev.eventID);
-            
-
-              
-
-            return (
-              <li
-                key={ev.eventID}
-                style={{
-                  border: "1px solid #ddd",
-                  borderRadius: 8,
-                  padding: 12,
-                  marginBottom: 8,
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  gap: 12,
-                }}
-              >
-                <div>
-                  <div style={{ fontWeight: 600 }}>
-                    {ev.name}{" "}
-                    <span style={{ fontSize: 12, color: "#666" }}>
-                      (#{ev.eventID})
-                    </span>
-                  </div>
-                  <div style={{ fontSize: 14, color: "#444" }}>
-                    {ev.date} at {ev.startTime}
-                  </div>
-                  <div style={{ fontSize: 13, color: "#666" }}>
-                    {ev.location || "No location"} · {ev.type || "No type"}
-                  </div>
-                  {ev.creator && (
-                    <div style={{ fontSize: 12, color: "#888", marginTop: 4 }}>
-                      Created by {ev.creator.username} (user #{ev.creator.userID}
-                      )
-                    </div>
-                  )}
-                </div>
-
-                  <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-                    {/* Join / Leave only for non-creators */}
-                    {user && !isCreator && (
-                      <button
-                        type="button"
-                        onClick={() =>
-                          isJoined ? handleLeave(ev.eventID) : handleJoin(ev.eventID)
-                        }
-                      >
-                        {isJoined ? "Leave" : "Join"}
-                      </button>
-                    )}
-
-                    {/* Creator label */}
-                    {isCreator && (
-                      <span style={{ fontSize: 12, color: "#aaa" }}>
-                        JOINED
-                      </span>
-                    )}
-
-                    {/* Single Edit/Delete block for creator */}
-                    {isCreator && (
-                      <>
-                        <button type="button" onClick={() => handleEditClick(ev)}>
-                          Edit
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => handleDelete(ev.eventID, ev)}
-                          style={{ backgroundColor: "#ffe5e5", borderColor: "#ffaaaa" }}
-                        >
-                          Delete
-                        </button>
-                      </>
-                    )}
-                  </div>
-
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-    </div>
-  );
+    {/* ---------- Signup Modal ---------- */}
+    {showSignup && (
+      <div className="signup-modal">
+        <form onSubmit={handleSignup}>
+          <input
+            type="text"
+            name="username"
+            value={signupForm.username}
+            onChange={handleSignupChange}
+            placeholder="Username"
+          />
+          <input
+            type="email"
+            name="email"
+            value={signupForm.email}
+            onChange={handleSignupChange}
+            placeholder="Email"
+          />
+          <input
+            type="password"
+            name="password"
+            value={signupForm.password}
+            onChange={handleSignupChange}
+            placeholder="Password"
+          />
+          <button type="submit">Sign Up</button>
+          {signupError && <p className="error">{signupError}</p>}
+          <button type="button" onClick={() => setShowSignup(false)}>Cancel</button>
+        </form>
+      </div>
+    )}
+  </div>
+);
 }
 
 export default App;
