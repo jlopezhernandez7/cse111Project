@@ -4,6 +4,11 @@ from flask import Blueprint, request, jsonify, session
 from models import db, User
 from werkzeug.security import generate_password_hash, check_password_hash
 
+
+from utils.emailer import send_email
+from models import Preference, Tag, User
+
+
 user_bp = Blueprint("users", __name__)
 
 

@@ -1,7 +1,8 @@
 # backend/routes/post_routes.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from models import db, Post, Event
+from routes.auth_routes import login_required  # ⬅️ import this
 
 post_bp = Blueprint("posts", __name__)
 
@@ -19,6 +20,7 @@ def post_to_dict(post: Post):
 def list_posts_for_event(event_id):
     """
     GET /api/posts/event/<event_id>
+    Public: anyone can view posts for an event.
     """
     event = Event.query.get_or_404(event_id)
     posts = event.posts
@@ -35,13 +37,16 @@ def get_post(post_id):
 
 
 @post_bp.post("/")
+@login_required
 def create_post():
     """
     POST /api/posts
+    Only the event's creator can create posts.
+
     Body JSON:
     {
-      "title": "Smash Tournament Announcements",
-      "content": "Bracket starts at 7PM...",
+      "title": "...",
+      "content": "...",
       "eventID": 4
     }
     """
@@ -57,6 +62,10 @@ def create_post():
     if not event:
         return jsonify({"error": "Invalid eventID"}), 404
 
+    #  Only the creator of the event can post
+    if event.e_userID != g.current_user.userID:
+        return jsonify({"error": "Only the creator of this event can create posts"}), 403
+
     post = Post(
         postTitle=title,
         postContent=content,
@@ -69,12 +78,23 @@ def create_post():
 
 
 @post_bp.patch("/<int:post_id>")
+@login_required
 def update_post(post_id):
     """
     PATCH /api/posts/<post_id>
+    Only the event creator can edit posts for that event.
     Body JSON: any subset of {title, content}
     """
     post = Post.query.get_or_404(post_id)
+    event = Event.query.get(post.p_eventID)
+
+    if not event:
+        return jsonify({"error": "Parent event not found"}), 404
+
+    # Only event creator can edit
+    if event.e_userID != g.current_user.userID:
+        return jsonify({"error": "Only the creator of this event can edit posts"}), 403
+
     data = request.get_json() or {}
 
     if "title" in data:
@@ -87,11 +107,22 @@ def update_post(post_id):
 
 
 @post_bp.delete("/<int:post_id>")
+@login_required
 def delete_post(post_id):
     """
     DELETE /api/posts/<post_id>
+    Only the event creator can delete posts.
     """
     post = Post.query.get_or_404(post_id)
+    event = Event.query.get(post.p_eventID)
+
+    if not event:
+        return jsonify({"error": "Parent event not found"}), 404
+
+    # Only event creator can delete
+    if event.e_userID != g.current_user.userID:
+        return jsonify({"error": "Only the creator of this event can delete posts"}), 403
+
     db.session.delete(post)
     db.session.commit()
     return jsonify({"message": f"Post {post_id} deleted"})

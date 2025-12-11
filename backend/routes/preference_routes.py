@@ -1,8 +1,6 @@
-# backend/routes/preference_routes.py
-
 from flask import Blueprint, request, jsonify, g
 from models import db, Preference, User, Tag
-from routes.auth_routes import login_required  # adjust import path
+from routes.auth_routes import login_required
 
 preference_bp = Blueprint("preferences", __name__)
 
@@ -26,7 +24,7 @@ def pref_to_dict(pref: Preference):
     }
 
 
-# get all tags + notification status
+# ---------- Get all tags + my notification status ----------
 
 @preference_bp.get("/me")
 @login_required
@@ -40,6 +38,7 @@ def get_my_preferences():
     user = g.current_user
     all_tags = Tag.query.all()
 
+    # Map tagID -> Preference row
     pref_by_tag_id = {p.p_tagsID: p for p in user.preferences}
 
     result = []
@@ -61,7 +60,7 @@ def get_my_preferences():
     )
 
 
-# set notifcation preference tags for user
+# ---------- Set preference explicitly ----------
 
 @preference_bp.post("/")
 @login_required
@@ -105,7 +104,7 @@ def set_preference():
     return jsonify(pref_to_dict(pref)), 201
 
 
-# toggle on /off notification 
+# ---------- Toggle preference on/off ----------
 
 @preference_bp.post("/toggle")
 @login_required
@@ -150,7 +149,8 @@ def toggle_preference():
     return jsonify(pref_to_dict(pref)), 201
 
 
-# delete preference 
+# ---------- Delete a preference ----------
+
 @preference_bp.delete("/<int:tag_id>")
 @login_required
 def delete_my_preference(tag_id):

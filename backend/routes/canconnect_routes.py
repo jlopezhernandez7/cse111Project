@@ -1,5 +1,3 @@
-# backend/routes/canconnect_routes.py
-
 from flask import Blueprint, request, jsonify
 from models import db, Event, Tag
 
@@ -91,7 +89,7 @@ def remove_connection(event_id, tag_id):
     return jsonify({"error": "Connection did not exist"}), 404
 
 
-# list tags for an event
+# ---------- List tags for an event ----------
 
 @canconnect_bp.get("/event/<int:event_id>")
 def list_tags_for_event(event_id):
@@ -110,7 +108,7 @@ def list_tags_for_event(event_id):
     )
 
 
-# list events for a tag
+# ---------- List events for a tag ----------
 
 @canconnect_bp.get("/tag/<int:tag_id>")
 def list_events_for_tag(tag_id):

@@ -1,7 +1,8 @@
 # backend/routes/media_routes.py
 
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, g
 from models import db, Media, Event
+from routes.auth_routes import login_required  # ⬅️ import this
 
 media_bp = Blueprint("media", __name__)
 
@@ -19,6 +20,7 @@ def media_to_dict(media: Media):
 def list_media_for_event(event_id):
     """
     GET /api/media/event/<event_id>
+    Public: anyone can view media for an event.
     """
     event = Event.query.get_or_404(event_id)
     items = event.media_items
@@ -35,9 +37,12 @@ def get_media(media_id):
 
 
 @media_bp.post("/")
+@login_required
 def create_media():
     """
     POST /api/media
+    Only the event's creator can attach media.
+
     Body JSON:
     {
       "eventID": 4,
@@ -57,6 +62,10 @@ def create_media():
     if not event:
         return jsonify({"error": "Invalid eventID"}), 404
 
+    # Only creator can add media
+    if event.e_userID != g.current_user.userID:
+        return jsonify({"error": "Only the creator of this event can add media"}), 403
+
     media = Media(
         m_eventID=event_id,
         m_mediaURL=url,
@@ -69,11 +78,22 @@ def create_media():
 
 
 @media_bp.delete("/<int:media_id>")
+@login_required
 def delete_media(media_id):
     """
     DELETE /api/media/<media_id>
+    Only the event creator can delete media for that event.
     """
     media = Media.query.get_or_404(media_id)
+    event = Event.query.get(media.m_eventID)
+
+    if not event:
+        return jsonify({"error": "Parent event not found"}), 404
+
+    #  Only creator can delete media
+    if event.e_userID != g.current_user.userID:
+        return jsonify({"error": "Only the creator of this event can delete media"}), 403
+
     db.session.delete(media)
     db.session.commit()
     return jsonify({"message": f"Media {media_id} deleted"})

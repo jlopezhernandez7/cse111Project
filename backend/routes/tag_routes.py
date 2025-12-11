@@ -1,5 +1,3 @@
-# backend/routes/tag_routes.py
-
 from flask import Blueprint, request, jsonify
 from models import db, Tag
 
@@ -23,7 +21,7 @@ def list_tag_types():
     GET /api/tags/types
 
     Returns unique tag types (strings), e.g.:
-    ["Math Study Group", "Reading Club", "Gaming", ...]
+    ["Gaming", "Math Study Group", "Reading Club", ...]
     """
     types = (
         db.session.query(Tag.t_type)
@@ -35,30 +33,65 @@ def list_tag_types():
     type_list = [t[0] for t in types if t[0] is not None]
     return jsonify(type_list)
 
-
 @tag_bp.post("/")
 def create_tag():
     """
     POST /api/tags
-    Body JSON example:
     {
-      "type": "gaming",
-      "date": "2025-11-30",
-      "startTime": "18:00",
+      "type": "anime",
+      "date": "2025-11-20",
+      "startTime": "13:30",
       "duration": 180,
       "capacity": 60
     }
+    Only the fields you send will be filled; others remain NULL.
+    If a tag with exactly the same fields already exists, re-use it.
     """
     data = request.get_json() or {}
 
+    type_ = data.get("type")
+    date = data.get("date")
+    start = data.get("startTime")
+    duration = data.get("duration")
+    capacity = data.get("capacity")
+
+    # 1) check if this exact combination already exists
+    existing = Tag.query.filter_by(
+        t_type=type_,
+        t_date=date,
+        t_startTime=start,
+        t_duration=duration,
+        t_capacity=capacity,
+    ).first()
+
+    if existing:
+        return jsonify(tag_to_dict(existing)), 200
+
+    # 2) otherwise create a new tag
     tag = Tag(
-        t_type=data.get("type"),
-        t_date=data.get("date"),
-        t_startTime=data.get("startTime"),
-        t_duration=data.get("duration"),
-        t_capacity=data.get("capacity"),
+        t_type=type_,
+        t_date=date,
+        t_startTime=start,
+        t_duration=duration,
+        t_capacity=capacity,
     )
 
     db.session.add(tag)
     db.session.commit()
     return jsonify(tag_to_dict(tag)), 201
+
+
+@tag_bp.get("/")
+def list_tags():
+    tags = Tag.query.all()
+    return jsonify([
+        {
+            "tagsID": t.tagsID,
+            "type": t.t_type,
+            "date": t.t_date,
+            "startTime": t.t_startTime,
+            "duration": t.t_duration,
+            "capacity": t.t_capacity,
+        }
+        for t in tags
+    ])
