@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import EventDetails from "./EventDetails";
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -415,228 +417,234 @@ async function handleLeave(eventId) {
   // ---------- UI ----------
 
   return (
-  <div className="app">
-    {/* ---------- Header ---------- */}
-    <header className="app-header">
-      <h1>Campus Events - University Event Finder</h1>
-      <div className="auth-controls">
-        {user ? (
-          <>
-            <span>Welcome, {user.username}</span>
-            <button onClick={handleLogout}>Logout</button>
-          </>
-        ) : (
-          <>
-            <button onClick={() => setShowLogin(true)}>Login</button>
-            <button onClick={() => setShowSignup(true)}>Sign Up</button>
-          </>
-        )}
-      </div>
-    </header>
+  <Router>
+    <Routes>
+      <Route
+        path="/"
+        element={
+          <div className="app">
 
+            {/* ---------- Header ---------- */}
+            <header className="app-header">
+              <h1>Campus Events - University Event Finder</h1>
+              <div className="auth-controls">
+                {user ? (
+                  <>
+                    <span>Welcome, {user.username}</span>
+                    <button onClick={handleLogout}>Logout</button>
+                  </>
+                ) : (
+                  <>
+                    <button onClick={() => setShowLogin(true)}>Login</button>
+                    <button onClick={() => setShowSignup(true)}>Sign Up</button>
+                  </>
+                )}
+              </div>
+            </header>
 
-    {/* ---------- Search + Filters ---------- */}
-    <section className="filters">
-      <input
-        type="text"
-        placeholder="Search by title, description, or location..."
-        value={searchTerm}
-        onChange={(e) => setSearchTerm(e.target.value)}
-      />
-      <div className="filter-buttons">
-        {["all", "study", "sports", "social", "volunteer", "other"].map((cat) => (
-          <button
-            key={cat}
-            className={filter === cat ? "active" : ""}
-            onClick={() => setFilter(cat)}
-          >
-            {cat.charAt(0).toUpperCase() + cat.slice(1)}
-          </button>
-        ))}
-      </div>
+            {/* ---------- Search + Filters ---------- */}
+            <section className="filters">
+              <input
+                type="text"
+                placeholder="Search by title, description, or location..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+              <div className="filter-buttons">
+                {["all", "study", "sports", "social", "volunteer", "other"].map((cat) => (
+                  <button
+                    key={cat}
+                    className={filter === cat ? "active" : ""}
+                    onClick={() => setFilter(cat)}
+                  >
+                    {cat.charAt(0).toUpperCase() + cat.slice(1)}
+                  </button>
+                ))}
+              </div>
+              <select>
+                <option>All Events</option>
+              </select>
+            </section>
 
-      <select>
-        <option>All Events</option>
-      </select>
-    </section>
-
-    {/* ---------- Create Event Button ---------- */}
-    {user && (
-      <button
-        onClick={() => setShowCreateEvent(true)}
-        className="create-event-btn"
-      >
-        + Create Event
-      </button>
-    )}
-
-    {/* ---------- Create Event Modal ---------- */}
-    {showCreateEvent && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Create Event</h2>
-          <form onSubmit={handleEventSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleEventFormChange}
-              placeholder="Event name"
-              required
-            />
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleEventFormChange}
-              required
-            />
-            <input
-              type="time"
-              name="startTime"
-              value={formData.startTime}
-              onChange={handleEventFormChange}
-              required
-            />
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleEventFormChange}
-              placeholder="Location"
-            />
-            <select
-              name="type"
-              value={formData.type}
-              onChange={handleEventFormChange}
-            >
-              <option value="">Select category</option>
-              <option value="study">Study</option>
-              <option value="sports">Sports</option>
-              <option value="social">Social</option>
-              <option value="volunteer">Volunteer</option>
-              <option value="other">Other</option>
-            </select>
-
-            <div className="modal-actions">
-              <button type="submit">Save Event</button>
-              <button type="button" onClick={() => setShowCreateEvent(false)}>
-                Cancel
+            {/* ---------- Create Event Button ---------- */}
+            {user && (
+              <button
+                onClick={() => setShowCreateEvent(true)}
+                className="create-event-btn"
+              >
+                + Create Event
               </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    )}
+            )}
 
+            {/* ---------- Create Event Modal ---------- */}
+            {showCreateEvent && (
+              <div className="modal-overlay">
+                <div className="modal-content">
+                  <h2>Create Event</h2>
+                  <form onSubmit={handleEventSubmit}>
+                    <input
+                      type="text"
+                      name="name"
+                      value={formData.name}
+                      onChange={handleEventFormChange}
+                      placeholder="Event name"
+                      required
+                    />
+                    <input
+                      type="date"
+                      name="date"
+                      value={formData.date}
+                      onChange={handleEventFormChange}
+                      required
+                    />
+                    <input
+                      type="time"
+                      name="startTime"
+                      value={formData.startTime}
+                      onChange={handleEventFormChange}
+                      required
+                    />
+                    <input
+                      type="text"
+                      name="location"
+                      value={formData.location}
+                      onChange={handleEventFormChange}
+                      placeholder="Location"
+                    />
+                    <select
+                      name="type"
+                      value={formData.type}
+                      onChange={handleEventFormChange}
+                    >
+                      <option value="">Select category</option>
+                      <option value="study">Study</option>
+                      <option value="sports">Sports</option>
+                      <option value="social">Social</option>
+                      <option value="volunteer">Volunteer</option>
+                      <option value="other">Other</option>
+                    </select>
 
-    {/* ---------- Events List ---------- */}
-    <main className="events-list">
-      {eventsLoading && <p>Loading events...</p>}
-      {eventsError && <p className="error">{eventsError}</p>}
-      {filteredEvents.map((ev) => (
-        <div className="event-card" key={ev.eventID}>
-          <h3>{ev.name}</h3>
-          <p className="event-category">{ev.type}</p>
-          <p>{ev.description}</p>
-          <p>
-            <strong>Date:</strong> {ev.date} <br />
-            <strong>Time:</strong> {ev.startTime} <br />
-            <strong>Location:</strong> {ev.location}
-          </p>
-          <p>
-            <strong>Attendance:</strong>{" "}
-            {ev.attendees?.length || 0} / {ev.maxAttendees || "∞"}
-          </p>
-          <p><em>Created by {ev.creator?.username}</em></p>
+                    <div className="modal-actions">
+                      <button type="submit">Save Event</button>
+                      <button type="button" onClick={() => setShowCreateEvent(false)}>
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            )}
 
-          {joinedEventIds.includes(ev.eventID) ? (
-            <button onClick={() => handleLeave(ev.eventID)}>Leave Event</button>
-          ) : (
-            <button onClick={() => handleJoin(ev.eventID)}>Join Event</button>
-          )}
+            {/* ---------- Events List ---------- */}
+            <main className="events-list">
+              {eventsLoading && <p>Loading events...</p>}
+              {eventsError && <p className="error">{eventsError}</p>}
 
-          {user?.userID === ev.creator?.userID && (
-            <>
-              <button onClick={() => handleEditClick(ev)}>Edit</button>
-              <button onClick={() => handleDelete(ev.eventID, ev)}>Delete</button>
-            </>
-          )}
-        </div>
-      ))}
-    </main>
+              {filteredEvents.map((ev) => (
+                  <div className="event-card">
+                    <h3>{ev.name}</h3>
+                    <p className="event-category">{ev.type}</p>
+                    <p>{ev.description}</p>
+                    <p>
+                      <strong>Date:</strong> {ev.date} <br />
+                      <strong>Time:</strong> {ev.startTime} <br />
+                      <strong>Location:</strong> {ev.location}
+                    </p>
+                    <p>
+                      <strong>Attendance:</strong>{" "}
+                      {ev.attendees?.length || 0} / {ev.maxAttendees || "∞"}
+                    </p>
+                    <p><em>Created by {ev.creator?.username}</em></p>
+                    <Link to={`/event/${ev.eventID}`}>
+                      <button className="details-btn">More Details</button>
+                    </Link>
+                    {joinedEventIds.includes(ev.eventID) ? (
+                      <button onClick={() => handleLeave(ev.eventID)}>Leave Event</button>
+                    ) : (
+                      <button onClick={() => handleJoin(ev.eventID)}>Join Event</button>
+                    )}
 
+                    {user?.userID === ev.creator?.userID && (
+                      <>
+                        <button onClick={() => handleEditClick(ev)}>Edit</button>
+                        <button onClick={() => handleDelete(ev.eventID, ev)}>Delete</button>
+                      </>
+                    )}
+                  </div>
+              ))}
+            </main>
 
-    {/* ---------- Login Modal ---------- */}
-    {showLogin && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Login</h2>
+            {/* ---------- Login Modal ---------- */}
+            {showLogin && (
+              <div className="modal-overlay">
+                <div className="modal-content">
+                  <h2>Login</h2>
+                  <form onSubmit={handleLogin}>
+                    <input
+                      type="email"
+                      name="email"
+                      value={loginForm.email}
+                      onChange={handleLoginFormChange}
+                      placeholder="Email"
+                    />
+                    <input
+                      type="password"
+                      name="password"
+                      value={loginForm.password}
+                      onChange={handleLoginFormChange}
+                      placeholder="Password"
+                    />
+                    <button type="submit" disabled={authLoading}>Login</button>
+                    {authError && <p className="error">{authError}</p>}
+                    <button type="button" onClick={() => setShowLogin(false)}>
+                      Cancel
+                    </button>
+                  </form>
+                </div>
+              </div>
+            )}
 
-          <form onSubmit={handleLogin}>
-            <input
-              type="email"
-              name="email"
-              value={loginForm.email}
-              onChange={handleLoginFormChange}
-              placeholder="Email"
-            />
+            {/* ---------- Signup Modal ---------- */}
+            {showSignup && (
+              <div className="signup-modal">
+                <form onSubmit={handleSignup}>
+                  <input
+                    type="text"
+                    name="username"
+                    value={signupForm.username}
+                    onChange={handleSignupChange}
+                    placeholder="Username"
+                  />
+                  <input
+                    type="email"
+                    name="email"
+                    value={signupForm.email}
+                    onChange={handleSignupChange}
+                    placeholder="Email"
+                  />
+                  <input
+                    type="password"
+                    name="password"
+                    value={signupForm.password}
+                    onChange={handleSignupChange}
+                    placeholder="Password"
+                  />
+                  <button type="submit">Sign Up</button>
+                  {signupError && <p className="error">{signupError}</p>}
+                  <button type="button" onClick={() => setShowSignup(false)}>
+                    Cancel
+                  </button>
+                </form>
+              </div>
+            )}
 
-            <input
-              type="password"
-              name="password"
-              value={loginForm.password}
-              onChange={handleLoginFormChange}
-              placeholder="Password"
-            />
+          </div>
+        }
+      />
+      <Route path="/event/:eventID" element={<EventDetails />} />
 
-            <button type="submit" disabled={authLoading}>Login</button>
-            {authError && <p className="error">{authError}</p>}
-
-            <button type="button" onClick={() => setShowLogin(false)}>
-              Cancel
-            </button>
-          </form>
-        </div>
-      </div>
-    )}
-
-
-    {/* ---------- Signup Modal ---------- */}
-    {showSignup && (
-      <div className="signup-modal">
-        <form onSubmit={handleSignup}>
-          <input
-            type="text"
-            name="username"
-            value={signupForm.username}
-            onChange={handleSignupChange}
-            placeholder="Username"
-          />
-          <input
-            type="email"
-            name="email"
-            value={signupForm.email}
-            onChange={handleSignupChange}
-            placeholder="Email"
-          />
-          <input
-            type="password"
-            name="password"
-            value={signupForm.password}
-            onChange={handleSignupChange}
-            placeholder="Password"
-          />
-          <button type="submit">Sign Up</button>
-          {signupError && <p className="error">{signupError}</p>}
-
-          <button type="button" onClick={() => setShowSignup(false)}>
-            Cancel
-          </button>
-        </form>
-      </div>
-    )}
-  </div>
+    </Routes>
+  </Router>
 );
 }
 
