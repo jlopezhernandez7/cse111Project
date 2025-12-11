@@ -12,6 +12,9 @@ function App() {
     email: "",
     password: "",
   });
+
+  const [showLogin, setShowLogin] = useState(false);
+
      
   // ---------- events state ----------
   const [events, setEvents] = useState([]);
@@ -138,6 +141,7 @@ async function handleLogin(e) {
 
     // 🔑 Only trust the session cookie
     await fetchCurrentUser();   // this reads /api/auth/me and sets user if cookie works
+    setShowLogin(false);
     setLoginForm({ email: "", password: "" });
   } catch (err) {
     console.error(err);
@@ -423,30 +427,13 @@ async function handleLeave(eventId) {
           </>
         ) : (
           <>
-            <form onSubmit={handleLogin} className="login-form">
-              <input
-                type="email"
-                name="email"
-                value={loginForm.email}
-                onChange={handleLoginFormChange}
-                placeholder="Email"
-              />
-              <input
-                type="password"
-                name="password"
-                value={loginForm.password}
-                onChange={handleLoginFormChange}
-                placeholder="Password"
-              />
-              <button type="submit" disabled={authLoading}>Login</button>
-              {authError && <p className="error">{authError}</p>}
-            </form>
+            <button onClick={() => setShowLogin(true)}>Login</button>
             <button onClick={() => setShowSignup(true)}>Sign Up</button>
           </>
         )}
       </div>
     </header>
-    
+
 
     {/* ---------- Search + Filters ---------- */}
     <section className="filters">
@@ -467,20 +454,24 @@ async function handleLeave(eventId) {
           </button>
         ))}
       </div>
-      {/* Date filter dropdown */}
+
       <select>
         <option>All Events</option>
-        {/* later: add date range options */}
       </select>
     </section>
 
-  {user && (
-      <button onClick={() => setShowCreateEvent(true)} className="create-event-btn">
-      + Create Event
+    {/* ---------- Create Event Button ---------- */}
+    {user && (
+      <button
+        onClick={() => setShowCreateEvent(true)}
+        className="create-event-btn"
+      >
+        + Create Event
       </button>
-      )}
+    )}
 
-      {showCreateEvent && (
+    {/* ---------- Create Event Modal ---------- */}
+    {showCreateEvent && (
       <div className="modal-overlay">
         <div className="modal-content">
           <h2>Create Event</h2>
@@ -536,7 +527,9 @@ async function handleLeave(eventId) {
           </form>
         </div>
       </div>
-      )}
+    )}
+
+
     {/* ---------- Events List ---------- */}
     <main className="events-list">
       {eventsLoading && <p>Loading events...</p>}
@@ -573,6 +566,42 @@ async function handleLeave(eventId) {
       ))}
     </main>
 
+
+    {/* ---------- Login Modal ---------- */}
+    {showLogin && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Login</h2>
+
+          <form onSubmit={handleLogin}>
+            <input
+              type="email"
+              name="email"
+              value={loginForm.email}
+              onChange={handleLoginFormChange}
+              placeholder="Email"
+            />
+
+            <input
+              type="password"
+              name="password"
+              value={loginForm.password}
+              onChange={handleLoginFormChange}
+              placeholder="Password"
+            />
+
+            <button type="submit" disabled={authLoading}>Login</button>
+            {authError && <p className="error">{authError}</p>}
+
+            <button type="button" onClick={() => setShowLogin(false)}>
+              Cancel
+            </button>
+          </form>
+        </div>
+      </div>
+    )}
+
+
     {/* ---------- Signup Modal ---------- */}
     {showSignup && (
       <div className="signup-modal">
@@ -600,7 +629,10 @@ async function handleLeave(eventId) {
           />
           <button type="submit">Sign Up</button>
           {signupError && <p className="error">{signupError}</p>}
-          <button type="button" onClick={() => setShowSignup(false)}>Cancel</button>
+
+          <button type="button" onClick={() => setShowSignup(false)}>
+            Cancel
+          </button>
         </form>
       </div>
     )}
