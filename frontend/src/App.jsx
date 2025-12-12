@@ -1,5 +1,9 @@
 import { useEffect, useState } from "react";
 import "./App.css";
+import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
+import EventDetails from "./EventDetails";
+
+
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
@@ -820,6 +824,11 @@ function App() {
   // ---------- UI ----------
 
   return (
+  <Router>
+    <Routes>
+      <Route
+        path="/"
+        element={
   <div className="app">
     {/* ---------- Header ---------- */}
     <header className="app-header">
@@ -1145,11 +1154,14 @@ function App() {
             <strong>Time:</strong> {ev.startTime} <br />
             <strong>Location:</strong> {ev.location}
           </p>
-          <p>
+          {/* <p>
             <strong>Attendance:</strong>{" "}
             {ev.attendees?.length || 0} / {ev.maxAttendees || "∞"}
-          </p>
+          </p> */}
           <p><em>Created by {ev.creator?.username}</em></p>
+          {/* <Link to={`/event/${ev.eventID}`}>
+              <button className="details-btn">More Details</button>
+          </Link> */}
 
           {joinedEventIds.includes(ev.eventID) ? (
             <button onClick={() => handleLeave(ev.eventID)}>Leave Event</button>
@@ -1380,6 +1392,10 @@ function App() {
       </div>
     )}
   </div>
+        }/>
+      <Route path="/event/:eventID" element={<EventDetails />} />
+    </Routes>
+  </Router>
 );
 }
 
