@@ -832,7 +832,7 @@ function App() {
   <div className="app">
     {/* ---------- Header ---------- */}
     <header className="app-header">
-      <h1>Campus Events - University Event Finder</h1>
+      <h1>Bobcat Connect</h1>
       <div className="auth-controls">
         {user ? (
           <>
@@ -1046,142 +1046,7 @@ function App() {
       </button>
     )}
 
-    {/* ---------- Create Event Modal ---------- */}
-    {showCreateEvent && (
-      <div className="modal-overlay">
-        <div className="modal-content">
-          <h2>Create Event</h2>
-          <form onSubmit={handleEventSubmit}>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleEventFormChange}
-              placeholder="Event name"
-              required
-            />
-            <input
-              type="date"
-              name="date"
-              value={formData.date}
-              onChange={handleEventFormChange}
-              required
-            />
-            <input
-              type="time"
-              name="startTime"
-              value={formData.startTime}
-              onChange={handleEventFormChange}
-              required
-            />
-            <input
-              type="text"
-              name="location"
-              value={formData.location}
-              onChange={handleEventFormChange}
-              placeholder="Location"
-            />
-            {/* Tag  */}
-            {/* Tags section: create + select */}
-<div className="event-tag-section">
-  <h4>Tags</h4>
-
-  {/* Quick create a new "type" tag from here */}
-  <div className="event-tag-create-form" style={{ marginBottom: "0.75rem" }}>
-    <input
-      type="text"
-      placeholder="New tag (e.g. band practice)"
-      value={newEventTagLabel}
-      onChange={(e) => setNewEventTagLabel(e.target.value)}
-    />
-    <button
-      type="button"                 // 👈 IMPORTANT: not a submit button
-      onClick={handleCreateTagFromEvent}
-      disabled={creatingEventTag}
-    >
-      {creatingEventTag ? "Adding..." : "Add tag"}
-    </button>
-  </div>
-  {eventTagError && <p className="error">{eventTagError}</p>}
-
-  {/* List of existing tags (scrollable) */}
-  {allTags.length === 0 ? (
-    <p style={{ fontSize: "0.85rem" }}>No tags defined yet.</p>
-  ) : (
-    <div className="event-tag-list">
-      {allTags.map((tag) => (
-        <label key={tag.tagsID} className="event-tag-item">
-          <input
-            type="checkbox"
-            checked={selectedEventTagIds.includes(tag.tagsID)}
-            onChange={() => toggleEventTag(tag.tagsID)}
-          />
-          <span>
-            #{tag.tagsID} – {formatTagLabel(tag)}
-          </span>
-        </label>
-      ))}
-    </div>
-  )}
-</div>
-
-
-
-
-            <div className="modal-actions">
-              <button type="submit">Save Event</button>
-              <button type="button" onClick={() => setShowCreateEvent(false)}>
-                Cancel
-              </button>
-            </div>
-          </form>
-        </div>
-      </div>
-    )}
-
-
-    {/* ---------- Events List ---------- */}
-    <main className="events-list">
-      {eventsLoading && <p>Loading events...</p>}
-      {eventsError && <p className="error">{eventsError}</p>}
-      {filteredEvents.map((ev) => (
-        <div className="event-card" key={ev.eventID}>
-          <h3>{ev.name}</h3>
-          <p className="event-category">{ev.type}</p>
-          <p>{ev.description}</p>
-          <p>
-            <strong>Date:</strong> {ev.date} <br />
-            <strong>Time:</strong> {ev.startTime} <br />
-            <strong>Location:</strong> {ev.location}
-          </p>
-          {/* <p>
-            <strong>Attendance:</strong>{" "}
-            {ev.attendees?.length || 0} / {ev.maxAttendees || "∞"}
-          </p> */}
-          <p><em>Created by {ev.creator?.username}</em></p>
-          {/* <Link to={`/event/${ev.eventID}`}>
-              <button className="details-btn">More Details</button>
-          </Link> */}
-
-          {joinedEventIds.includes(ev.eventID) ? (
-            <button onClick={() => handleLeave(ev.eventID)}>Leave Event</button>
-          ) : (
-            <button onClick={() => handleJoin(ev.eventID)}>Join Event</button>
-          )}
-
-          {/*---------- View Details Button ---------- */}
-              <button onClick={() => handleViewDetails(ev)}>More Details</button>
-
-          {user?.userID === ev.creator?.userID && (
-            <>
-              <button onClick={() => handleEditClick(ev)}>Edit</button>
-              <button onClick={() => handleDelete(ev.eventID, ev)}>Delete</button>
-            </>
-          )}
-        </div>
-      ))}
-    </main>
-                {/* ---------- Event More Details Panel ---------- */}
+    {/* ---------- Event More Details Panel ---------- */}
     {selectedEvent && (
       <section className="event-detail">
         <h2>Event Details</h2>
@@ -1319,6 +1184,143 @@ function App() {
         )}
       </section>
     )}
+
+    {/* ---------- Create Event Modal ---------- */}
+    {showCreateEvent && (
+      <div className="modal-overlay">
+        <div className="modal-content">
+          <h2>Create Event</h2>
+          <form onSubmit={handleEventSubmit}>
+            <input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleEventFormChange}
+              placeholder="Event name"
+              required
+            />
+            <input
+              type="date"
+              name="date"
+              value={formData.date}
+              onChange={handleEventFormChange}
+              required
+            />
+            <input
+              type="time"
+              name="startTime"
+              value={formData.startTime}
+              onChange={handleEventFormChange}
+              required
+            />
+            <input
+              type="text"
+              name="location"
+              value={formData.location}
+              onChange={handleEventFormChange}
+              placeholder="Location"
+            />
+            {/* Tag  */}
+            {/* Tags section: create + select */}
+<div className="event-tag-section">
+  <h4>Tags</h4>
+
+  {/* Quick create a new "type" tag from here */}
+  <div className="event-tag-create-form" style={{ marginBottom: "0.75rem" }}>
+    <input
+      type="text"
+      placeholder="New tag (e.g. band practice)"
+      value={newEventTagLabel}
+      onChange={(e) => setNewEventTagLabel(e.target.value)}
+    />
+    <button
+      type="button"                 // 👈 IMPORTANT: not a submit button
+      onClick={handleCreateTagFromEvent}
+      disabled={creatingEventTag}
+    >
+      {creatingEventTag ? "Adding..." : "Add tag"}
+    </button>
+  </div>
+  {eventTagError && <p className="error">{eventTagError}</p>}
+
+  {/* List of existing tags (scrollable) */}
+  {allTags.length === 0 ? (
+    <p style={{ fontSize: "0.85rem" }}>No tags defined yet.</p>
+  ) : (
+    <div className="event-tag-list">
+      {allTags.map((tag) => (
+        <label key={tag.tagsID} className="event-tag-item">
+          <input
+            type="checkbox"
+            checked={selectedEventTagIds.includes(tag.tagsID)}
+            onChange={() => toggleEventTag(tag.tagsID)}
+          />
+          <span>
+            #{tag.tagsID} – {formatTagLabel(tag)}
+          </span>
+        </label>
+      ))}
+    </div>
+  )}
+</div>
+
+
+
+
+            <div className="modal-actions">
+              <button type="submit">Save Event</button>
+              <button type="button" onClick={() => setShowCreateEvent(false)}>
+                Cancel
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    )}
+
+
+    {/* ---------- Events List ---------- */}
+    <main className="events-list">
+      {eventsLoading && <p>Loading events...</p>}
+      {eventsError && <p className="error">{eventsError}</p>}
+      {filteredEvents.map((ev) => (
+        <div className="event-card" key={ev.eventID}>
+          <h3>{ev.name}</h3>
+          <p className="event-category">{ev.type}</p>
+          <p>{ev.description}</p>
+          <p>
+            <strong>Date:</strong> {ev.date} <br />
+            <strong>Time:</strong> {ev.startTime} <br />
+            <strong>Location:</strong> {ev.location}
+          </p>
+          {/* <p>
+            <strong>Attendance:</strong>{" "}
+            {ev.attendees?.length || 0} / {ev.maxAttendees || "∞"}
+          </p> */}
+          <p><em>Created by {ev.creator?.username}</em></p>
+          {/* <Link to={`/event/${ev.eventID}`}>
+              <button className="details-btn">More Details</button>
+          </Link> */}
+
+          {joinedEventIds.includes(ev.eventID) ? (
+            <button onClick={() => handleLeave(ev.eventID)}>Leave Event</button>
+          ) : (
+            <button onClick={() => handleJoin(ev.eventID)}>Join Event</button>
+          )}
+
+          {/*---------- View Details Button ---------- */}
+              <button onClick={() => handleViewDetails(ev)}>More Details</button>
+
+          {user?.userID === ev.creator?.userID && (
+            <>
+              <button onClick={() => handleEditClick(ev)}>Edit</button>
+              <button onClick={() => handleDelete(ev.eventID, ev)}>Delete</button>
+            </>
+          )}
+        </div>
+      ))}
+    </main>
+                
 
 
 
